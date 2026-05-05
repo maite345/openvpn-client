@@ -50,3 +50,11 @@ jobs:
          push: true
          tags: ${{ steps.meta.outputs.tags }}
          labels: ${{ steps.meta.outputs.labels }}
+         
+    - name: Build and push test image (tests)
+      uses: docker/build-push-action@v5
+      with:
+         context: .
+         file: ./Dockerfile.tests
+         push: true
+         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tests
