@@ -3,10 +3,13 @@ MAINTAINER David Personette <dperson@gmail.com>
 
 # Install openvpn
 RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash curl ip6tables iptables openvpn \
+    apk --no-cache --no-progress add bash wget curl ip6tables iptables openvpn \
                 shadow shadow-login tini tzdata && \
     addgroup -S vpn && \
-    curl -sL https://talos.dev/install | sh && \
+    VERSION=$(curl -s https://api.github.com/repos/siderolabs/talos/releases/latest | grep tag_name | cut -d '"' -f 4) && \
+    wget https://github.com/siderolabs/talos/releases/download/${VERSION}/talosctl-linux-amd64 && \
+    chmod +x talosctl-linux-amd64 && \
+    mv talosctl-linux-amd64 /usr/local/bin/talosctl && \
     rm -rf /tmp/*
 
 COPY openvpn.sh /usr/bin/
